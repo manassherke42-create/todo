@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Team Elevatex Login 🌾</title>
+    <link rel="stylesheet" href="login.css">
+    
+</head>
+
+<body>
+
+<div class="overlay">
+<div class="container">
+
+    <h2>ElevateX</h2>
+    <p>Inventors Registration Portal</p>
+
+    <form id="form" target="hidden_iframe"
+    action="https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse"
+    method="POST">
+
+        <input type="text" name="entry.111111111" placeholder="👤 Inventors Name" required>
+        <input type="tel" name="entry.222222222" placeholder="📞 Contact Number" required>
+        <input type="text" name="entry.333333333" placeholder="🧑‍💻 Username" required>
+        <input type="email" name="entry.444444444" placeholder="📧 Email Address" required>
+        <input type="number" name="entry.555555555" placeholder="🎂 Age" required>
+
+        <input type="hidden" id="farmerId" name="entry.666666666">
+        <input type="hidden" id="password" name="entry.777777777">
+
+        <button type="submit">Register</button>
+    </form>
+
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+    <div id="result"></div>
+
+</div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

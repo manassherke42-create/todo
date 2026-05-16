@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ElevateX - Solution Flow</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f7fb;
+}
+
+/* HERO SECTION (like your image) */
+.hero {
+    background: #0b1445;
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h1 {
+    font-size: 38px;
+}
+
+.hero p {
+    color: #cfd8ff;
+    font-size: 18px;
+}
+
+/* MAIN CONTAINER */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+/* TITLE */
+.section-title {
+    text-align: center;
+    font-size: 30px;
+    color: #0b1445;
+    margin-bottom: 30px;
+}
+
+/* FLOW STEPS */
+.flow {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.step {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.step:hover {
+    transform: translateY(-5px);
+}
+
+/* NUMBER */
+.step-number {
+    min-width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #0b1445, #2b7cff);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+/* CONTENT */
+.step-content h3 {
+    margin: 0;
+    color: #0b1445;
+}
+
+.step-content p {
+    margin: 5px 0 0;
+    color: #555;
+}
+
+/* ARROW */
+.arrow {
+    text-align: center;
+    font-size: 28px;
+    color: #aaa;
+}
+
+/* RESULT BOX */
+.result {
+    background: #0b1445;
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.result h2 {
+    margin-bottom: 10px;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>🚀 ElevateX</h1>
+    <p>Making elevators faster, smarter, and more efficient</p>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <h2 class="section-title">Solution Flow</h2>
+
+    <div class="flow">
+
+        <div class="step">
+            <div class="step-number">1</div>
+            <div>
+                <h3>Button Press</h3>
+                <p>User presses the elevator call button.</p>
+            </div>
+        </div>
+
+        <div class="arrow">⬇</div>
+
+        <div class="step">
+            <div class="step-number">2</div>
+            <div>
+                <h3>Zone Detection</h3>
+                <p>IR sensors create a smart waiting zone near the elevator.</p>
+            </div>
+        </div>
+
+        <div class="arrow">⬇</div>
+
+        <div class="step">
+            <div class="step-number">3</div>
+            <div>
+                <h3>Human Detection</h3>
+                <p>System detects if a person is present inside the zone.</p>
+            </div>
+        </div>
+
+        <div class="arrow">⬇</div>
+
+        <div class="step">
+            <div class="step-number">4</div>
+            <div>
+                <h3>Multi-Frame Confirmation</h3>
+                <p>Multiple frame checks ensure accurate detection.</p>
+            </div>
+        </div>
+
+        <div class="arrow">⬇</div>
+
+        <div class="step">
+            <div class="step-number">5</div>
+            <div>
+                <h3>Final Decision</h3>
+                <p>
+                    ✔ Person present → Elevator stops  
+                    ❌ No person → Elevator skips floor
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RESULT -->
+    <div class="result">
+        <h2>✨ Outcome</h2>
+        <p>
+            Reduced energy waste, faster service, improved efficiency, 
+            and better accessibility for all users.
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1065 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Elevator – Presence Detection System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;500;700;900&display=swap');
+
+  :root {
+    --bg:        #080c10;
+    --surface:   #0e1318;
+    --panel:     #131920;
+    --border:    #1e2830;
+    --border2:   #263040;
+    --blue:      #38bdf8;
+    --green:     #34d399;
+    --red:       #f87171;
+    --amber:     #fbbf24;
+    --gray:      #475569;
+    --text:      #cbd5e1;
+    --muted:     #4b6070;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-body: 'Exo 2', sans-serif;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    font-family: var(--font-body);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(56,189,248,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 80% 90%, rgba(52,211,153,0.03) 0%, transparent 60%);
+  }
+
+  /* ─── HEADER ─── */
+  header { text-align:center; margin-bottom:22px; }
+  header h1 {
+    font-size: clamp(15px,2.2vw,22px);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    text-shadow: 0 0 20px rgba(56,189,248,0.35);
+  }
+  header p {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── SCENE ─── */
+  .scene {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1080px;
+  }
+
+  /* ─── BUILDING ─── */
+  .building-wrap { display:flex; flex-direction:column; align-items:center; }
+  .building-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .shaft {
+    width: 260px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6), inset 0 0 30px rgba(0,0,0,0.4);
+  }
+
+  /* Each floor row */
+  .floor {
+    position: absolute;
+    left: 0; right: 0;
+    height: 70px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+
+  .floor-label {
+    position: absolute;
+    left: 9px;
+    top: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* Ground indicator */
+  .floor[data-f="0"] .floor-label::after {
+    content: ' GF';
+    font-size: 8px;
+    color: var(--green);
+    opacity: 0.7;
+  }
+
+  /* Camera icon */
+  .floor-camera {
+    position: absolute;
+    left: 9px;
+    bottom: 6px;
+    font-size: 9px;
+    color: var(--muted);
+    opacity: 0.5;
+    font-family: var(--font-mono);
+    transition: color 0.4s, opacity 0.4s;
+  }
+  .floor-camera.active { color: var(--blue); opacity: 1; }
+
+  /* Wait zone */
+  .wait-zone {
+    position: absolute;
+    left: 36px;
+    top: 10px;
+    width: 34px;
+    height: 48px;
+    border: 1px dashed var(--border2);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: var(--muted);
+    transition: border-color 0.4s, background 0.4s;
+  }
+  .wait-zone.active { border-color: var(--blue);  background: rgba(56,189,248,0.06); }
+  .wait-zone.person { border-color: var(--green); background: rgba(52,211,153,0.09); }
+  .wait-zone.empty  { border-color: var(--red);   background: rgba(248,113,113,0.06); }
+
+  .person-figure {
+    position: absolute;
+    left: 40px;
+    font-size: 17px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 10;
+    line-height: 1;
+  }
+
+  /* Elevator */
+  .elevator-car {
+    position: absolute;
+    right: 3px;
+    width: 56px;
+    height: 58px;
+    background: linear-gradient(160deg, #1a2535 0%, #0e1620 100%);
+    border: 2px solid #2a3a50;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    transition: top 1.2s cubic-bezier(0.45,0,0.55,1), border-color 0.3s, box-shadow 0.3s;
+    z-index: 5;
+    box-shadow: 0 0 14px rgba(56,189,248,0.08);
+  }
+  .elevator-car.at-floor {
+    border-color: var(--blue);
+    box-shadow: 0 0 20px rgba(56,189,248,0.28);
+  }
+  .elevator-car.moving {
+    border-color: var(--amber);
+    box-shadow: 0 0 16px rgba(251,191,36,0.2);
+  }
+
+  .elevator-door {
+    display: flex;
+    gap: 2px;
+    width: 38px;
+    height: 38px;
+  }
+  .door-panel {
+    flex: 1;
+    background: #2e3f55;
+    border-radius: 1px;
+    transition: transform 0.5s ease;
+  }
+  .door-panel.left  { transform-origin: left;  }
+  .door-panel.right { transform-origin: right; }
+  .elevator-car.doors-open .door-panel.left  { transform: scaleX(0.08); }
+  .elevator-car.doors-open .door-panel.right { transform: scaleX(0.08); }
+
+  .elevator-label {
+    font-family: var(--font-mono);
+    font-size: 7px;
+    color: var(--blue);
+    letter-spacing: 0.1em;
+  }
+
+  /* Scan beam */
+  .scan-beam {
+    position: absolute;
+    right: 59px;
+    height: 2px;
+    background: linear-gradient(to left, rgba(56,189,248,0.9), transparent);
+    width: 0;
+    transition: width 0.5s, opacity 0.4s;
+    opacity: 0;
+    z-index: 8;
+    border-radius: 1px;
+  }
+  .scan-beam.active { width: 70px; opacity: 1; }
+
+  /* ─── FLOOR CONTROL PANEL (right side of building) ─── */
+  .floor-controls {
+    position: absolute;
+    left: 76px;
+    top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .floor-btn {
+    width: 60px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid;
+    font-family: var(--font-mono);
+    font-size: 7px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .floor-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .floor-btn.call-btn {
+    background: rgba(56,189,248,0.07);
+    border-color: #2a4a60;
+    color: #5a8aaa;
+  }
+  .floor-btn.call-btn:hover:not(:disabled) { background: rgba(56,189,248,0.18); border-color: var(--blue); color: var(--blue); }
+  .floor-btn.call-btn.active { background: rgba(56,189,248,0.22); border-color: var(--blue); color: var(--blue); box-shadow: 0 0 6px rgba(56,189,248,0.35); }
+
+  .floor-btn.pax-btn {
+    background: rgba(52,211,153,0.06);
+    border-color: #1e4035;
+    color: #3a7060;
+  }
+  .floor-btn.pax-btn:hover:not(:disabled) { background: rgba(52,211,153,0.18); border-color: var(--green); color: var(--green); }
+  .floor-btn.pax-btn.active { background: rgba(52,211,153,0.22); border-color: var(--green); color: var(--green); box-shadow: 0 0 6px rgba(52,211,153,0.35); }
+
+  /* ─── RIGHT SIDE PANEL ─── */
+  .info-panel {
+    flex: 1;
+    min-width: 300px;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .card h3 {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .status-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    font-size: 12px;
+  }
+  .status-line .label {
+    font-size: 11px;
+    color: var(--muted);
+    width: 110px;
+    flex-shrink: 0;
+  }
+
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--gray);
+    transition: background 0.4s, box-shadow 0.4s;
+  }
+  .dot.blue  { background: var(--blue);  box-shadow: 0 0 5px var(--blue); }
+  .dot.green { background: var(--green); box-shadow: 0 0 5px var(--green); }
+  .dot.red   { background: var(--red);   box-shadow: 0 0 5px var(--red); }
+  .dot.amber { background: var(--amber); box-shadow: 0 0 5px var(--amber); }
+  .dot.gray  { background: var(--gray);  box-shadow: none; }
+
+  .sval { font-family: var(--font-mono); font-weight:700; font-size:12px; }
+  .sval.blue  { color: var(--blue); }
+  .sval.green { color: var(--green); }
+  .sval.red   { color: var(--red); }
+  .sval.amber { color: var(--amber); }
+  .sval.gray  { color: var(--gray); }
+
+  /* Confidence bar */
+  .conf-wrap {
+    background: #0d1520;
+    border-radius: 3px;
+    height: 7px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .conf-bar {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--green);
+    width: 0%;
+    transition: width 0.5s ease, background 0.4s;
+  }
+
+  /* Frame dots */
+  .frames-row { display:flex; gap:4px; margin-top:6px; }
+  .frame-dot {
+    width: 11px; height: 11px;
+    border-radius: 2px;
+    background: #0d1520;
+    border: 1px solid var(--border2);
+    transition: background 0.3s;
+  }
+  .frame-dot.hit  { background: var(--green); border-color: var(--green); }
+  .frame-dot.miss { background: var(--red);   border-color: var(--red); }
+
+  /* Decision box */
+  .decision-box {
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+    min-height: 78px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: border-color 0.4s;
+  }
+  .decision-box.stop    { border-color: var(--green); }
+  .decision-box.skip    { border-color: var(--red); }
+  .decision-box.energy  { border-color: var(--amber); }
+  .decision-box.checking { border-color: var(--blue); }
+
+  .d-icon { font-size: 24px; }
+  .d-text { font-size: 14px; font-weight: 700; font-family: var(--font-mono); }
+  .d-text.green { color: var(--green); }
+  .d-text.red   { color: var(--red); }
+  .d-text.amber { color: var(--amber); }
+  .d-text.blue  { color: var(--blue); }
+  .d-sub  { font-size: 10px; color: var(--muted); font-family: var(--font-mono); }
+
+  /* Queue display */
+  .queue-display {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    min-height: 20px;
+  }
+  .queue-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+  .queue-tag.call-tag { border-color: var(--blue); color: var(--blue); background: rgba(56,189,248,0.08); }
+  .queue-tag.pax-tag  { border-color: var(--green); color: var(--green); background: rgba(52,211,153,0.08); }
+
+  /* Log */
+  .log-box {
+    background: #060a0e;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    height: 140px;
+    overflow-y: auto;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .log-box::-webkit-scrollbar { width: 3px; }
+  .log-box::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .log-entry { margin-bottom: 3px; line-height: 1.6; }
+  .log-entry.info { color: var(--blue); }
+  .log-entry.ok   { color: var(--green); }
+  .log-entry.warn { color: var(--amber); }
+  .log-entry.err  { color: var(--red); }
+
+  /* Bottom Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 700px;
+  }
+
+  .btn {
+    padding: 9px 18px;
+    border-radius: 5px;
+    border: 1px solid;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .btn:hover:not(:disabled) { filter: brightness(1.3); transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+  .btn-blue  { background: rgba(56,189,248,0.08); border-color: var(--blue); color: var(--blue); }
+  .btn-green { background: rgba(52,211,153,0.08); border-color: var(--green); color: var(--green); }
+  .btn-red   { background: rgba(248,113,113,0.08); border-color: var(--red); color: var(--red); }
+  .btn-amber { background: rgba(251,191,36,0.08); border-color: var(--amber); color: var(--amber); }
+  .btn-gray  { background: rgba(71,85,105,0.15); border-color: var(--gray); color: #8899aa; }
+
+  /* Energy badge */
+  .energy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 1px solid #2a4020;
+    background: rgba(52,211,153,0.06);
+    color: var(--green);
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--muted);
+  }
+  .legend-swatch {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Smart Elevator — Presence Detection System</h1>
+  <p>HOG+SVM · Multi-Frame Analysis · Energy-Optimized Dispatch · 7-Floor Building</p>
+</header>
+
+<div class="scene">
+
+  <!-- ═══ BUILDING ═══ -->
+  <div class="building-wrap">
+    <div class="building-title">▌ ELEVATOR SHAFT — 7 FLOORS ▐</div>
+    <div class="shaft" id="shaft">
+      <!-- Floors rendered by JS -->
+      <div class="elevator-car" id="elevator">
+        <div class="elevator-door">
+          <div class="door-panel left"></div>
+          <div class="door-panel right"></div>
+        </div>
+        <div class="elevator-label">LIFT</div>
+      </div>
+      <div class="scan-beam" id="scanBeam"></div>
+    </div>
+    <!-- Legend -->
+    <div class="legend" style="margin-top:10px; max-width:260px">
+      <div class="legend-item"><div class="legend-swatch" style="border-color:var(--blue);background:rgba(56,189,248,0.15)"></div>Called</div>
+      <div class="legend-item"><div class="legend-swatch" style="border-color:var(--green);background:rgba(52,211,153,0.15)"></div>Pax Present</div>
+      <div class="legend-item"><div class="legend-swatch" style="border-color:var(--red);background:rgba(248,113,113,0.1)"></div>No One</div>
+    </div>
+  </div>
+
+  <!-- ═══ INFO PANEL ═══ -->
+  <div class="info-panel">
+
+    <!-- System Status -->
+    <div class="card">
+      <h3>System Status</h3>
+      <div class="status-line">
+        <div class="dot" id="dot-el"></div>
+        <span class="label">Lift Floor</span>
+        <span class="sval blue" id="val-floor">G</span>
+      </div>
+      <div class="status-line">
+        <div class="dot" id="dot-cam"></div>
+        <span class="label">Camera</span>
+        <span class="sval gray" id="val-cam">Idle</span>
+      </div>
+      <div class="status-line">
+        <div class="dot" id="dot-det"></div>
+        <span class="label">Detection</span>
+        <span class="sval gray" id="val-det">—</span>
+      </div>
+      <div class="status-line">
+        <div class="dot" id="dot-buf"></div>
+        <span class="label">Buffer Timer</span>
+        <span class="sval gray" id="val-buf">—</span>
+      </div>
+      <div class="status-line">
+        <div class="dot gray" id="dot-energy"></div>
+        <span class="label">Energy Mode</span>
+        <span class="sval gray" id="val-energy">Normal</span>
+      </div>
+      <div style="margin-top:8px">
+        <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-bottom:4px">DETECTION CONFIDENCE</div>
+        <div class="conf-wrap"><div class="conf-bar" id="confBar"></div></div>
+      </div>
+      <div style="margin-top:8px">
+        <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-bottom:5px">FRAME ANALYSIS (5 FRAMES)</div>
+        <div class="frames-row">
+          <div class="frame-dot" id="f0"></div>
+          <div class="frame-dot" id="f1"></div>
+          <div class="frame-dot" id="f2"></div>
+          <div class="frame-dot" id="f3"></div>
+          <div class="frame-dot" id="f4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Queue -->
+    <div class="card">
+      <h3>Active Queue</h3>
+      <div class="queue-display" id="queueDisplay">
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted)">No pending calls</span>
+      </div>
+    </div>
+
+    <!-- Decision Box -->
+    <div class="decision-box" id="decisionBox">
+      <div class="d-icon" id="dIcon">⏳</div>
+      <div class="d-text amber" id="dText">Awaiting Call</div>
+      <div class="d-sub" id="dSub">Use floor buttons to call lift / set passenger</div>
+    </div>
+
+    <!-- Log -->
+    <div class="card" style="padding:12px">
+      <h3>System Log</h3>
+      <div class="log-box" id="logBox"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Global Controls -->
+<div class="controls">
+  <button class="btn btn-blue"  id="btnRunQueue" onclick="runQueue()">▶ Dispatch Lift</button>
+  <button class="btn btn-amber" id="btnCallAll"  onclick="callAllFloors()">📢 Call All Floors</button>
+  <button class="btn btn-gray"  id="btnReset"    onclick="resetAll()">↺ Reset</button>
+</div>
+<p style="font-family:var(--font-mono);font-size:10px;color:var(--muted);text-align:center;margin-top:10px;max-width:620px">
+  ⚡ Energy-save: if a floor is called but no passenger present → lift stops at nearest floor instead of opening doors.
+</p>
+
+<script>
+  // ─── CONFIG ─────────────────────────────────────────────
+  // 7 floors: index 0 = Ground, 6 = 7th floor (top)
+  // Building renders top-to-bottom in DOM (index 6 at top)
+  const NUM_FLOORS = 7;
+  const FLOOR_NAMES = ['G','F1','F2','F3','F4','F5','F6'];
+  const FLOOR_LABELS = ['Ground','Floor 1','Floor 2','Floor 3','Floor 4','Floor 5','Floor 6'];
+
+  // Each floor row height
+  const FLOOR_H = 70;
+  const SHAFT_H = NUM_FLOORS * FLOOR_H; // 490px
+
+  // Elevator top position per floor (floor 0 = bottom row = top offset (6)*70 = 420)
+  function floorTop(idx) {
+    return (NUM_FLOORS - 1 - idx) * FLOOR_H + 6;
+  }
+
+  // ─── STATE ──────────────────────────────────────────────
+  let currentFloor = 0;
+  let busy = false;
+  const calledFloors    = new Set(); // floors where call button pressed
+  const passengerFloors = new Set(); // floors where passenger present toggled
+  let savedTrips = 0;
+  let energySaved = 0;
+
+  const elevator = document.getElementById('elevator');
+  const scanBeam = document.getElementById('scanBeam');
+
+  // ─── BUILD SHAFT ────────────────────────────────────────
+  const shaft = document.getElementById('shaft');
+  shaft.style.height = SHAFT_H + 'px';
+
+  // Render floor rows (top = highest floor number)
+  for (let i = NUM_FLOORS - 1; i >= 0; i--) {
+    const rowIdx = NUM_FLOORS - 1 - i; // 0=top row = floor 6
+    const div = document.createElement('div');
+    div.className = 'floor';
+    div.id = 'floor-' + i;
+    div.dataset.f = i;
+    div.style.top = rowIdx * FLOOR_H + 'px';
+
+    div.innerHTML = `
+      <span class="floor-label">${FLOOR_NAMES[i]}</span>
+      <div class="floor-camera" id="cam-${i}">📷</div>
+      <div class="wait-zone" id="zone-${i}">◻</div>
+      <div class="person-figure" id="person-${i}">🧍</div>
+      <div class="floor-controls">
+        <button class="floor-btn call-btn" id="call-${i}" onclick="toggleCall(${i})" title="Call lift to ${FLOOR_LABELS[i]}">
+          ▲ CALL
+        </button>
+        <button class="floor-btn pax-btn" id="pax-${i}" onclick="togglePassenger(${i})" title="Toggle passenger at ${FLOOR_LABELS[i]}">
+          🧍 PAX
+        </button>
+      </div>
+    `;
+    // Insert before elevator / scanBeam
+    shaft.insertBefore(div, elevator);
+  }
+
+  // Position person figures
+  for (let i = 0; i < NUM_FLOORS; i++) {
+    const p = document.getElementById('person-' + i);
+    const row = (NUM_FLOORS - 1 - i);
+    p.style.top = (row * FLOOR_H + 16) + 'px';
+  }
+
+  // ─── ELEVATOR INITIAL POSITION ──────────────────────────
+  elevator.style.top = floorTop(0) + 'px';
+  scanBeam.style.top = (floorTop(0) + 38) + 'px';
+
+  // ─── HELPERS ────────────────────────────────────────────
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function log(msg, type = 'info') {
+    const box = document.getElementById('logBox');
+    const ts = new Date().toLocaleTimeString('en', { hour12: false });
+    const el = document.createElement('div');
+    el.className = 'log-entry ' + type;
+    el.textContent = `[${ts}] ${msg}`;
+    box.appendChild(el);
+    box.scrollTop = box.scrollHeight;
+    if (box.children.length > 80) box.removeChild(box.firstChild);
+  }
+
+  function setStatus(dotId, valId, color, text) {
+    document.getElementById(dotId).className = 'dot ' + color;
+    const v = document.getElementById(valId);
+    v.className = 'sval ' + color;
+    v.textContent = text;
+  }
+
+  function setDecision(icon, text, textColor, sub, boxClass) {
+    document.getElementById('dIcon').textContent = icon;
+    const dt = document.getElementById('dText');
+    dt.textContent = text;
+    dt.className = 'd-text ' + textColor;
+    document.getElementById('dSub').textContent = sub;
+    document.getElementById('decisionBox').className = 'decision-box ' + (boxClass || '');
+  }
+
+  function setConfidence(pct, color) {
+    const bar = document.getElementById('confBar');
+    bar.style.width = pct + '%';
+    bar.style.background = color || 'var(--green)';
+  }
+
+  function resetFrames() {
+    for (let i = 0; i < 5; i++)
+      document.getElementById('f' + i).className = 'frame-dot';
+  }
+
+  function setFrame(i, state) {
+    document.getElementById('f' + i).className = 'frame-dot ' + state;
+  }
+
+  function setZone(idx, state) {
+    const z = document.getElementById('zone-' + idx);
+    z.className = 'wait-zone';
+    if (state === 'active') { z.classList.add('active'); z.textContent = '⟳'; }
+    if (state === 'person') { z.classList.add('person'); z.textContent = '🧍'; }
+    if (state === 'empty')  { z.classList.add('empty');  z.textContent = '✕'; }
+    if (state === 'idle')   z.textContent = '◻';
+  }
+
+  function showPerson(idx, visible) {
+    document.getElementById('person-' + idx).style.opacity = visible ? '1' : '0';
+  }
+
+  function setCamera(idx, active) {
+    const c = document.getElementById('cam-' + idx);
+    if (active) c.classList.add('active');
+    else c.classList.remove('active');
+  }
+
+  function disableGlobalBtns(v) {
+    ['btnRunQueue','btnCallAll','btnReset'].forEach(id => {
+      document.getElementById(id).disabled = v;
+    });
+  }
+
+  function updateQueue() {
+    const qd = document.getElementById('queueDisplay');
+    qd.innerHTML = '';
+    let any = false;
+    // Show called floors
+    for (let i = NUM_FLOORS - 1; i >= 0; i--) {
+      if (calledFloors.has(i)) {
+        const t = document.createElement('span');
+        t.className = 'queue-tag call-tag';
+        t.textContent = `CALL-${FLOOR_NAMES[i]}`;
+        qd.appendChild(t);
+        any = true;
+      }
+      if (passengerFloors.has(i)) {
+        const t = document.createElement('span');
+        t.className = 'queue-tag pax-tag';
+        t.textContent = `PAX-${FLOOR_NAMES[i]}`;
+        qd.appendChild(t);
+        any = true;
+      }
+    }
+    if (!any) {
+      qd.innerHTML = '<span style="font-family:var(--font-mono);font-size:10px;color:var(--muted)">No pending calls</span>';
+    }
+  }
+
+  // ─── FLOOR BUTTON HANDLERS ──────────────────────────────
+  function toggleCall(floorIdx) {
+    if (busy) return;
+    if (calledFloors.has(floorIdx)) {
+      calledFloors.delete(floorIdx);
+      document.getElementById('call-' + floorIdx).classList.remove('active');
+      log(`Call cancelled at ${FLOOR_LABELS[floorIdx]}`, 'warn');
+    } else {
+      calledFloors.add(floorIdx);
+      document.getElementById('call-' + floorIdx).classList.add('active');
+      log(`Call registered at ${FLOOR_LABELS[floorIdx]}`, 'info');
+    }
+    updateQueue();
+  }
+
+  function togglePassenger(floorIdx) {
+    if (busy) return;
+    if (passengerFloors.has(floorIdx)) {
+      passengerFloors.delete(floorIdx);
+      document.getElementById('pax-' + floorIdx).classList.remove('active');
+      setZone(floorIdx, 'idle');
+      showPerson(floorIdx, false);
+      log(`Passenger cleared at ${FLOOR_LABELS[floorIdx]}`, 'warn');
+    } else {
+      passengerFloors.add(floorIdx);
+      document.getElementById('pax-' + floorIdx).classList.add('active');
+      setZone(floorIdx, 'person');
+      showPerson(floorIdx, true);
+      log(`Passenger set at ${FLOOR_LABELS[floorIdx]}`, 'ok');
+    }
+    updateQueue();
+  }
+
+  function callAllFloors() {
+    if (busy) return;
+    for (let i = 0; i < NUM_FLOORS; i++) {
+      if (!calledFloors.has(i)) {
+        calledFloors.add(i);
+        document.getElementById('call-' + i).classList.add('active');
+      }
+    }
+    log('All floors called — BROADCAST MODE', 'warn');
+    updateQueue();
+  }
+
+  // ─── MOVE ELEVATOR ──────────────────────────────────────
+  async function moveElevatorTo(targetFloor) {
+    if (currentFloor === targetFloor) return;
+    const dir = targetFloor > currentFloor ? '▲' : '▼';
+    log(`${dir} Moving: ${FLOOR_NAMES[currentFloor]} → ${FLOOR_NAMES[targetFloor]}`, 'info');
+    setStatus('dot-el', 'val-floor', 'amber', 'Moving...');
+    elevator.classList.add('moving');
+    elevator.classList.remove('at-floor');
+
+    elevator.style.top = floorTop(targetFloor) + 'px';
+    scanBeam.style.top = (floorTop(targetFloor) + 38) + 'px';
+
+    // Travel time proportional to distance
+    const dist = Math.abs(targetFloor - currentFloor);
+    await wait(400 + dist * 220);
+
+    currentFloor = targetFloor;
+    elevator.classList.remove('moving');
+    elevator.classList.add('at-floor');
+    setStatus('dot-el', 'val-floor', 'blue', FLOOR_NAMES[targetFloor]);
+    log(`Arrived: ${FLOOR_NAMES[targetFloor]}`, 'info');
+  }
+
+  // ─── FRAME ANALYSIS ─────────────────────────────────────
+  async function runFrameAnalysis(hitFrames) {
+    resetFrames();
+    setStatus('dot-cam', 'val-cam', 'blue', 'Scanning...');
+    scanBeam.classList.add('active');
+    let hits = 0;
+    for (let i = 0; i < 5; i++) {
+      await wait(250);
+      const h = hitFrames[i];
+      setFrame(i, h ? 'hit' : 'miss');
+      if (h) hits++;
+      const pct = Math.round((hits / (i + 1)) * 100);
+      setConfidence(pct, pct > 60 ? 'var(--green)' : pct > 30 ? 'var(--amber)' : 'var(--red)');
+    }
+    scanBeam.classList.remove('active');
+    setStatus('dot-cam', 'val-cam', 'gray', 'Idle');
+    const conf = Math.round((hits / 5) * 100);
+    log(`Frame analysis: ${hits}/5 detected (${conf}% confidence)`, hits >= 3 ? 'ok' : 'warn');
+    return conf;
+  }
+
+  // ─── FIND NEAREST CALLED FLOOR ──────────────────────────
+  function nearestCalledFloor(fromFloor, excludeFloor) {
+    let best = null, bestDist = Infinity;
+    for (const f of calledFloors) {
+      if (f === excludeFloor) continue;
+      const d = Math.abs(f - fromFloor);
+      if (d < bestDist) { bestDist = d; best = f; }
+    }
+    return best;
+  }
+
+  // ─── PROCESS ONE FLOOR CALL ─────────────────────────────
+  async function processFloor(floorIdx) {
+    const hasPax = passengerFloors.has(floorIdx);
+
+    setDecision('🔄', `Processing ${FLOOR_NAMES[floorIdx]}`, 'blue', 'Dispatching...', 'checking');
+    document.getElementById('call-' + floorIdx).classList.remove('active');
+
+    // Move to floor
+    await moveElevatorTo(floorIdx);
+    await wait(200);
+
+    // Activate camera
+    setCamera(floorIdx, true);
+    setZone(floorIdx, 'active');
+    setStatus('dot-det', 'val-det', 'blue', 'Analyzing...');
+    setDecision('🔍', 'Scanning Zone', 'blue', `Checking ${FLOOR_LABELS[floorIdx]} waiting area`, 'checking');
+    await wait(350);
+
+    if (hasPax) {
+      // ── PASSENGER PRESENT ──────────────────────────────
+      showPerson(floorIdx, true);
+      setZone(floorIdx, 'person');
+      log(`Camera: human detected at ${FLOOR_LABELS[floorIdx]}`, 'ok');
+      await wait(300);
+
+      const conf = await runFrameAnalysis([true, true, true, true, true]);
+      setStatus('dot-det', 'val-det', 'green', 'CONFIRMED');
+      setStatus('dot-buf', 'val-buf', 'green', 'N/A');
+      setStatus('dot-energy', 'val-energy', 'green', 'Normal Stop');
+      setDecision('🚪', 'STOP — DOORS OPEN', 'green', `Passenger confirmed (${conf}% confidence)`, 'stop');
+      log(`Decision: STOP at ${FLOOR_NAMES[floorIdx]} — opening doors`, 'ok');
+      await wait(500);
+
+      // Open doors
+      elevator.classList.add('doors-open');
+      log('Doors opening...', 'ok');
+      await wait(1500);
+      elevator.classList.remove('doors-open');
+      log('Doors closed', 'info');
+
+      // Passenger boards
+      passengerFloors.delete(floorIdx);
+      document.getElementById('pax-' + floorIdx).classList.remove('active');
+      showPerson(floorIdx, false);
+      setZone(floorIdx, 'idle');
+
+    } else {
+      // ── NO PASSENGER — BUFFER CHECK ────────────────────
+      setZone(floorIdx, 'active');
+      log(`Camera: zone empty at ${FLOOR_LABELS[floorIdx]}`, 'warn');
+      await wait(300);
+
+      const conf1 = await runFrameAnalysis([false, false, false, false, false]);
+      setStatus('dot-det', 'val-det', 'red', 'NOT DETECTED');
+
+      // Buffer period
+      log(`No presence — buffer timer: 2s`, 'warn');
+      setStatus('dot-buf', 'val-buf', 'amber', '2s left');
+      setDecision('⏱️', 'Buffer Period', 'amber', 'Waiting for possible late arrival...', 'checking');
+      await wait(700);
+      setStatus('dot-buf', 'val-buf', 'amber', '1s left');
+      await wait(700);
+
+      // Re-check
+      log(`Buffer expired — re-checking ${FLOOR_LABELS[floorIdx]}`, 'warn');
+      const conf2 = await runFrameAnalysis([false, false, false, false, false]);
+      setStatus('dot-det', 'val-det', 'red', 'ABSENT');
+      setStatus('dot-buf', 'val-buf', 'red', 'Expired');
+      setZone(floorIdx, 'empty');
+
+      // ⚡ ENERGY SAVE — find nearest remaining called floor
+      const nearest = nearestCalledFloor(floorIdx, floorIdx);
+
+      if (nearest !== null) {
+        setStatus('dot-energy', 'val-energy', 'amber', '⚡ Rerouting');
+        setDecision('⚡', 'ENERGY SAVE — REROUTING', 'amber',
+          `No pax confirmed — going to nearest: ${FLOOR_NAMES[nearest]}`, 'energy');
+        log(`⚡ Energy Save: skip ${FLOOR_NAMES[floorIdx]}, reroute to nearest ${FLOOR_NAMES[nearest]}`, 'warn');
+      } else {
+        // No more calls — return to nearest floor (ground or stay)
+        setStatus('dot-energy', 'val-energy', 'amber', '⚡ Standby');
+        setDecision('⚡', 'ENERGY SAVE — DOORS CLOSED', 'amber',
+          `No passenger at ${FLOOR_NAMES[floorIdx]} — doors NOT opened`, 'energy');
+        log(`⚡ Energy Save: no pax at ${FLOOR_NAMES[floorIdx]} — doors stayed closed`, 'err');
+        energySaved++;
+        savedTrips++;
+      }
+
+      energySaved++;
+    }
+
+    setCamera(floorIdx, false);
+    elevator.classList.remove('at-floor');
+    calledFloors.delete(floorIdx);
+    updateQueue();
+    await wait(300);
+  }
+
+  // ─── MAIN QUEUE RUNNER ──────────────────────────────────
+  async function runQueue() {
+    if (busy) return;
+    if (calledFloors.size === 0) {
+      log('No calls in queue. Use CALL buttons on floors.', 'warn');
+      return;
+    }
+    busy = true;
+    disableGlobalBtns(true);
+    disableAllFloorBtns(true);
+
+    log(`═══ DISPATCH START — ${calledFloors.size} floor(s) in queue ═══`, 'info');
+
+    // Process floors from nearest to current, then sweep
+    while (calledFloors.size > 0) {
+      // Find next floor: closest to current
+      let nextFloor = null, minDist = Infinity;
+      for (const f of calledFloors) {
+        const d = Math.abs(f - currentFloor);
+        if (d < minDist) { minDist = d; nextFloor = f; }
+      }
+      if (nextFloor === null) break;
+      await processFloor(nextFloor);
+    }
+
+    log('═══ DISPATCH COMPLETE ═══', 'ok');
+    setDecision('✅', 'All Calls Served', 'green', `${energySaved} energy-save events`, 'stop');
+    setStatus('dot-energy', 'val-energy', 'green', `Saved ×${energySaved}`);
+
+    busy = false;
+    disableGlobalBtns(false);
+    disableAllFloorBtns(false);
+    updateQueue();
+  }
+
+  function disableAllFloorBtns(v) {
+    for (let i = 0; i < NUM_FLOORS; i++) {
+      document.getElementById('call-' + i).disabled = v;
+      document.getElementById('pax-' + i).disabled = v;
+    }
+  }
+
+  // ─── RESET ──────────────────────────────────────────────
+  function resetAll() {
+    if (busy) return;
+
+    calledFloors.clear();
+    passengerFloors.clear();
+    savedTrips = 0;
+    energySaved = 0;
+
+    elevator.style.transition = 'none';
+    elevator.style.top = floorTop(0) + 'px';
+    scanBeam.style.top = (floorTop(0) + 38) + 'px';
+    setTimeout(() => { elevator.style.transition = ''; }, 50);
+    currentFloor = 0;
+
+    elevator.className = 'elevator-car';
+
+    for (let i = 0; i < NUM_FLOORS; i++) {
+      setZone(i, 'idle');
+      showPerson(i, false);
+      setCamera(i, false);
+      document.getElementById('call-' + i).classList.remove('active');
+      document.getElementById('pax-' + i).classList.remove('active');
+      document.getElementById('call-' + i).disabled = false;
+      document.getElementById('pax-' + i).disabled = false;
+    }
+
+    setStatus('dot-el',  'val-floor',  'blue',  'G');
+    setStatus('dot-cam', 'val-cam',    'gray',  'Idle');
+    setStatus('dot-det', 'val-det',    'gray',  '—');
+    setStatus('dot-buf', 'val-buf',    'gray',  '—');
+    setStatus('dot-energy','val-energy','gray', 'Normal');
+    setConfidence(0);
+    resetFrames();
+    updateQueue();
+    setDecision('⏳', 'Awaiting Call', 'amber', 'Use floor buttons to call lift / set passenger', '');
+
+    document.getElementById('logBox').innerHTML = '';
+    log('System reset — ready', 'ok');
+    log('HOG+SVM pipeline initialized', 'info');
+    disableGlobalBtns(false);
+    scanBeam.classList.remove('active');
+  }
+
+  // ─── INIT ────────────────────────────────────────────────
+  resetAll();
+</script>
+</body>
+</html>.

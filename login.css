@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial;
+    background: url('https://media.istockphoto.com/id/153756997/photo/modern-office-building-and-elevators.jpg?s=612x612&w=0&k=20&c=JPMjSLzcl9f1QC0P8Z6Wrx2qAnhqHCxg8E721So5Db0=') no-repeat center/cover;
+}
+
+.overlay {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 380px;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    text-align: center;
+}
+
+input {
+    width: 95%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2d6a4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
+#result {
+    margin-top: 15px;
+    background: #f1fdf6;
+    padding: 10px;
+    border-radius: 6px;
+}

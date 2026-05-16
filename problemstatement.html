@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElevateX - Smart Elevator System</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #0b0c2a, #141654);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #ccc;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .header h1 {
+            font-size: 45px;
+            color: #00d4ff;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #ccc;
+            margin-top: 10px;
+        }
+
+        /* Problem Section */
+        .problem-box {
+            background: #12143d;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            animation: fadeIn 1s ease-in;
+        }
+
+        .problem-box h2 {
+            color: #ff6ec7;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .problem-box p {
+            text-align: justify;
+            line-height: 1.8;
+            font-size: 16px;
+            color: #ddd;
+        }
+
+        /* Highlight Section */
+        .highlights {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .highlight {
+            background: #1b1e4b;
+            padding: 12px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            text-align: center;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .highlight:hover {
+            background: #252a6b;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: #1b1e4b;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: #252a6b;
+        }
+
+        .card h3 {
+            color: #ffd369;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .stat h2 {
+            color: #00d4ff;
+            font-size: 30px;
+        }
+
+        .stat p {
+            color: #ccc;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #00d4ff, #ff6ec7);
+            color: white;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #aaa;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    
+
+    <!-- Header -->
+    <div class="header">
+        <h1>🚀 Smart Elevator System</h1>
+        <p>Making elevators faster, smarter, and more efficient</p>
+    </div>
+
+    <!-- Problem Statement -->
+    <div class="problem-box">
+        <h2>Problem Statement</h2>
+        <p>
+            Current elevator systems lack a reliable, fail-safe, and privacy-preserving mechanism to confirm whether passengers are actually waiting before stopping at a floor. This leads to unnecessary stops, inefficient movement, and increased energy consumption. As a result, users experience longer waiting times and reduced service quality. Additionally, these inefficiencies can create accessibility issues for individuals who depend on fast and reliable elevator services.
+        </p>
+
+        <div class="highlights">
+            <div class="highlight">⚡ Energy Waste</div>
+            <div class="highlight">⏳ Delays</div>
+            <div class="highlight">📉 Inefficiency</div>
+            <div class="highlight">♿ Accessibility Issues</div>
+        </div>
+
+        <div style="text-align:center;">
+            <a href="#" class="btn">Learn More</a>
+        </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards">
+        <div class="card">
+            <h3>⚡ Energy Loss</h3>
+            <p>Unnecessary stops increase power consumption.</p>
+        </div>
+        <div class="card">
+            <h3>⏳ Slow Service</h3>
+            <p>Elevators take longer due to extra stops.</p>
+        </div>
+        <div class="card">
+            <h3>📉 Reduced Efficiency</h3>
+            <p>System performance drops during peak hours.</p>
+        </div>
+        <div class="card">
+            <h3>♿ User Difficulty</h3>
+            <p>Delayed service affects accessibility users.</p>
+        </div>
+    </div>

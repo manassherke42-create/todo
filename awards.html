@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team ElevateX - Competition Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #090d16 0%, #111625 100%);
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .fun-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* --- HIGH CREATIVE CUSTOM ANIMATIONS --- */
+        @keyframes floatEffect {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(0.5deg); }
+        }
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.05); }
+        }
+        @keyframes particleUp {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .animate-float { animation: floatEffect 5s infinite ease-in-out; }
+        .animate-pulse-slow { animation: subtlePulse 4s infinite ease-in-out; }
+        
+        /* Ambient Vertical Particle Engine elements */
+        .bubble-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #10b981;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Photo Grid Framework Accents */
+        .photo-card {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #1e293b;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .photo-card:hover {
+            border-color: #38bdf8;
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.25);
+        }
+        .photo-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.85) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Upcoming Tech Radar Sweep */
+        .radar-box {
+            position: relative;
+            overflow: hidden;
+        }
+        .radar-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.15), transparent);
+            animation: scanline 3s infinite linear;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="bubble-particle" style="top: 20%; left: 10%; animation: particleUp 8s infinite linear;"></div>
+        <div class="bubble-particle" style="top: 50%; left: 85%; animation: particleUp 11s infinite linear; animation-delay: 2s; background: #38bdf8;"></div>
+        <div class="bubble-particle" style="top: 80%; left: 30%; animation: particleUp 9s infinite linear; animation-delay: 4s;"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 py-12">
+        
+        <header class="text-center mb-16 animate-float">
+            <div class="inline-block bg-slate-900/90 border-4 border-slate-800 rounded-3xl p-8 shadow-2xl backdrop-blur-md relative">
+                <div class="absolute -top-7 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-400 to-emerald-400 p-3.5 rounded-full shadow-lg text-slate-950">
+                    <i class="fa-solid fa-elevator text-2xl animate-bounce"></i>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-black mt-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-300 to-emerald-400 tracking-tight">
+                    ElevateX Arena Ledger
+                </h1>
+                <p class="text-xs md:text-sm text-slate-400 max-w-xl mx-auto mt-2">
+                    Showcasing our deployment milestones, competitive presentations, and real-life hardware validation journeys. Filter project views below.
+                </p>
+                
+                <div class="flex flex-wrap justify-center gap-3 mt-6">
+                    <button onclick="scrollToSection('kshitij-deck')" class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition-all active:scale-95">
+                        <i class="fa-solid fa-graduation-cap mr-1.5"></i> Kshitij 2026
+                    </button>
+                    <button onclick="scrollToSection('inception-deck')" class="bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition-all active:scale-95">
+                        <i class="fa-solid fa-lightbulb mr-1.5"></i> Idea Inception 2025
+                    </button>
+                    <button onclick="scrollToSection('aakruti-deck')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider transition-all active:scale-95">
+                        <i class="fa-solid fa-bullseye mr-1.5"></i> Aakruti 2026 (Upcoming)
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <section id="kshitij-deck" class="mb-20 bg-slate-900/30 border border-slate-800/80 rounded-3xl p-6 backdrop-blur-sm transition-all hover:border-slate-700/60">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="p-3 bg-cyan-500/10 text-cyan-400 rounded-2xl text-xl border border-cyan-500/20"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-white tracking-wide">KSHITIJ 2026</h2>
+                        <p class="text-xs text-cyan-400/80 font-mono mt-0.5">Venue Partner: Pimpri Chinchwad College of Engineering (PCCOE)</p>
+                    </div>
+                </div>
+                <span class="text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-3 py-1 rounded-full uppercase font-bold tracking-widest">Concluded Project Arena</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/kshitij1.jpg.jpeg" alt="Kshitij Event Record 1" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Event Log Capture #1</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 01</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/kshitij2.jpeg" alt="Kshitij Event Record 2" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Event Log Capture #2</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 02</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/kshitij3.jpeg" alt="Kshitij Event Record 3" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Event Log Capture #3</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 03</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/kshitij4.jpeg" alt="Kshitij Event Record 4" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Event Log Capture #4</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 04</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/kshitij5.jpeg" alt="Kshitij Event Record 5" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Event Log Capture #5</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 05</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/kshitij6.jpeg" alt="Kshitij Event Record 6" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Event Log Capture #6</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 06</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="inception-deck" class="mb-20 bg-slate-900/30 border border-slate-800/80 rounded-3xl p-6 backdrop-blur-sm transition-all hover:border-slate-700/60">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="p-3 bg-indigo-500/10 text-indigo-400 rounded-2xl text-xl border border-indigo-500/20"><i class="fa-solid fa-lightbulb"></i></div>
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-white tracking-wide">IDEA INCEPTION 2025</h2>
+                        <p class="text-xs text-indigo-400/80 font-mono mt-0.5">Prototype Architecture Validation Summit</p>
+                    </div>
+                </div>
+                <span class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-full uppercase font-bold tracking-widest">Concluded Project Arena</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/idea1.jpeg" alt="Idea Inception Capture 1" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Milestone Capture #1</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 01</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/idea2.jpeg" alt="Idea Inception Capture 2" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Milestone Capture #2</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 02</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/idea3.jpeg" alt="Idea Inception Capture 3" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Milestone Capture #3</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 03</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/idea4.jpeg" alt="Idea Inception Capture 4" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Milestone Capture #4</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 04</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/idea5.jpeg" alt="Idea Inception Capture 5" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Milestone Capture #5</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 05</span>
+                    </div>
+                </div>
+
+                <div class="photo-card rounded-2xl bg-slate-950 group">
+                    <div class="w-full h-52 bg-slate-900 overflow-hidden flex items-center justify-center">
+                        <img src="images/idea6.jpeg" alt="Idea Inception Capture 6" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">Milestone Capture #6</span>
+                        <span class="text-[9px] font-mono text-slate-500 bg-slate-900/90 border border-slate-800 px-1.5 py-0.5 rounded">Asset Slot 06</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="aakruti-deck" class="radar-box bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border-2 border-emerald-500/30 rounded-3xl p-8 shadow-2xl relative">
+            <div class="absolute top-4 right-4 flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full text-emerald-400 font-mono text-[10px] uppercase font-bold tracking-wider animate-pulse">
+                <i class="fa-solid fa-satellite-dish"></i> Target Locked
+            </div>
+
+            <div class="max-w-3xl mx-auto text-center space-y-4">
+                <span class="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-md border border-emerald-500/20 uppercase tracking-widest inline-block">
+                    Next Strategic Roadmap Phase
+                </span>
+                <h2 class="text-3xl md:text-5xl font-black text-white">
+                    AAKRUTI 2026
+                </h2>
+                <h3 class="text-sm md:text-base text-slate-400 font-medium tracking-wide">
+                    GLOBAL TECH COMPETITION
+                </h3>
+                
+                <div class="w-16 h-1 w-full mx-auto max-w-[120px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent my-4"></div>
+                
+                <p class="text-xs md:text-sm text-slate-400 leading-relaxed max-w-xl mx-auto">
+                    Preparing our migration design system to test the edge system capabilities against international optimization frameworks. Deploying the full HOG+SVM computer vision tracking kernel configurations live.
+                </p>
+
+                <div class="grid grid-cols-3 gap-2 sm:gap-4 max-w-md mx-auto pt-4 text-center font-mono">
+                    <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80">
+                        <div class="text-lg font-bold text-white">PHASE</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">03 / Implementation</div>
+                    </div>
+                    <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80">
+                        <div class="text-lg font-bold text-emerald-400">GLOBAL</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">Tier Target Matrix</div>
+                    </div>
+                    <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80">
+                        <div class="text-lg font-bold text-white">2026</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">Deployment Year</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        function scrollToSection(sectionTargetId) {
+            const targetElement = document.getElementById(sectionTargetId);
+            if(targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        }
+    </script>
+</body>
+</html>

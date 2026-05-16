@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElevateX - Animated Cost & Business World</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .fun-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* --- CARTOON ELEVATOR ANIMATION ENGINE --- */
+        .elevator-shaft {
+            background: linear-gradient(90deg, rgba(51,65,85,0.3) 0%, rgba(30,41,59,0.6) 50%, rgba(51,65,85,0.3) 100%);
+            border-left: 4px dashed #38bdf8;
+            border-right: 4px dashed #38bdf8;
+            position: relative;
+        }
+
+        .elevator-car {
+            position: absolute;
+            left: 5%;
+            width: 90%;
+            height: 90px;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            border: 3px solid #38bdf8;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+            transition: top 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 4px;
+            z-index: 20;
+        }
+
+        /* Elevator Doors */
+        .door {
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(90deg, #bae6fd 0%, #7dd3fc 100%);
+            border: 1px solid #0284c7;
+            transition: transform 0.5s ease-in-out;
+        }
+        .door-left { border-radius: 6px 0 0 6px; transform-origin: left; }
+        .door-right { border-radius: 0 6px 6px 0; transform-origin: right; }
+        
+        /* Door Open State triggered by JS */
+        .elevator-car.open .door-left { transform: scaleX(0.1); }
+        .elevator-car.open .door-right { transform: scaleX(0.1); }
+
+        /* --- CARTOON HUMANS ANIMATIONS --- */
+        @keyframes walk {
+            0% { transform: translateX(-10px) rotate(0deg); }
+            50% { transform: translateX(5px) rotate(3deg); }
+            100% { transform: translateX(-10px) rotate(0deg); }
+        }
+        @keyframes bouncePassenger {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        @keyframes floatTokens {
+            0% { transform: translateY(20px) scale(0.6); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-60px) scale(1.1); opacity: 0; }
+        }
+
+        .walking-human {
+            animation: walk 2.5s infinite ease-in-out;
+        }
+        .bouncing-human {
+            animation: bouncePassenger 1.8s infinite ease-in-out;
+        }
+        .floating-token {
+            animation: floatTokens 3s infinite linear;
+        }
+
+        /* Perspective grid styling */
+        .floor-row {
+            min-height: 220px;
+            border-bottom: 8px solid #1e293b;
+            position: relative;
+        }
+        .floor-sign {
+            background: #f59e0b;
+            color: #0f172a;
+            clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen relative">
+
+    <div class="fixed top-12 left-10 text-slate-700/20 text-9xl pointer-events-none"><i class="fa-solid fa-cloud"></i></div>
+    <div class="fixed bottom-24 right-12 text-slate-700/20 text-9xl pointer-events-none"><i class="fa-solid fa-cloud"></i></div>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 relative z-10">
+        
+        <header class="text-center mb-12 bg-slate-900/60 p-6 rounded-3xl border-4 border-slate-800 backdrop-blur-md relative">
+            <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-400 to-amber-400 p-3 rounded-full shadow-lg text-slate-900">
+                <i class="fa-solid fa-rocket-launch text-3xl animate-bounce"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-amber-300 mt-4 tracking-wide">
+                ElevateX Interactive Town
+            </h1>
+            <p class="text-sm md:text-base text-slate-300 max-w-2xl mx-auto mt-2">
+                Welcome to our animated operational building! Click any floor's navigation array below to move the elevator cab and inspect our breakdown metrics live.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-12 gap-4 bg-slate-950/40 p-4 rounded-3xl border-2 border-slate-800/80 backdrop-blur-sm shadow-2xl">
+            
+            <div class="col-span-3 elevator-shaft rounded-2xl hidden md:block relative overflow-hidden bg-slate-950">
+                <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-700"></div>
+                
+                <div id="cartoon-elevator" class="elevator-car" style="top: 40px;">
+                    <div class="door door-left"></div>
+                    <div class="absolute z-10 text-center text-slate-900">
+                        <svg class="w-8 h-8 bouncing-human" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="32" cy="20" r="12" fill="#f43f5e"/>
+                            <path d="M12 52C12 40.9543 20.9543 32 32 32C43.0457 32 52 40.9543 52 52V56H12V52Z" fill="#f43f5e"/>
+                            <circle cx="26" cy="18" r="2" fill="#fff"/><circle cx="38" cy="18" r="2" fill="#fff"/>
+                            <path d="M28 26C28 26 30 28 32 28C34 28 36 26 36 26" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="door door-right"></div>
+                </div>
+
+                <div class="absolute bottom-0 left-0 right-0 h-4 bg-slate-800"></div>
+            </div>
+
+            <div class="col-span-12 md:col-span-9 space-y-2">
+                
+                <div id="floor-macro" class="floor-row bg-slate-900/30 hover:bg-slate-900/50 transition-all rounded-2xl p-6 flex flex-col justify-between">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="floor-sign font-bold px-3 py-1 rounded text-sm shadow-md">LEVEL 03</span>
+                            <h2 class="text-2xl font-bold text-cyan-400"><i class="fa-solid fa-chart-pie mr-2"></i>Macro Business Metrics</h2>
+                        </div>
+                        <button onclick="callElevator(40, 'floor-macro')" class="bg-cyan-500 hover:bg-cyan-600 active:scale-95 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider shadow-md transition-all">
+                            <i class="fa-solid fa-elevator mr-1.5"></i>Call Lift Here
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 my-4 relative">
+                        <div class="bg-slate-900/90 border-2 border-cyan-500/30 p-4 rounded-xl relative group overflow-hidden">
+                            <span class="absolute -right-2 -bottom-2 text-6xl text-cyan-500/10"><i class="fa-solid fa-vault"></i></span>
+                            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">Initial Outlay</div>
+                            <div class="text-3xl font-extrabold text-white mt-1">₹2,00,000</div>
+                            <p class="text-[11px] text-slate-400 mt-1">Complete system deployment baseline config</p>
+                        </div>
+                        
+                        <div class="bg-slate-900/90 border-2 border-emerald-500/30 p-4 rounded-xl relative overflow-hidden">
+                            <span class="absolute right-2 top-2 text-emerald-400 floating-token"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                            <div class="text-xs text-emerald-400 font-bold uppercase tracking-wider">Annual Cash Yield</div>
+                            <div class="text-3xl font-extrabold text-emerald-400 mt-1">+₹42,000</div>
+                            <p class="text-[11px] text-slate-400 mt-1">Combining electricity savings & lifespan benefits</p>
+                        </div>
+
+                        <div class="bg-slate-900/90 border-2 border-amber-500/30 p-4 rounded-xl relative overflow-hidden">
+                            <span class="absolute -right-1 bottom-1 text-5xl text-amber-500/10"><i class="fa-solid fa-hourglass-start"></i></span>
+                            <div class="text-xs text-amber-400 font-bold uppercase tracking-wider">Breakeven Target</div>
+                            <div class="text-3xl font-extrabold text-amber-400 mt-1">4.7 Years</div>
+                            <p class="text-[11px] text-slate-400 mt-1">Fast ROI timeline metrics verified</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-end justify-end space-x-6 h-12 border-t border-slate-800/60 pt-2 overflow-hidden">
+                        <div class="walking-human flex flex-col items-center">
+                            <div class="bg-amber-400 text-slate-950 font-bold text-[9px] px-1.5 py-0.5 rounded mb-1 shadow-sm">ROI Verified!</div>
+                            <svg class="w-8 h-8" viewBox="0 0 64 64" fill="none">
+                                <circle cx="32" cy="20" r="10" fill="#fbbf24"/>
+                                <path d="M16 48C16 39.1634 23.1634 32 32 32C40.8366 32 48 39.1634 48 48V54H16V48Z" fill="#3b82f6"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="floor-cost" class="floor-row bg-slate-900/30 hover:bg-slate-900/50 transition-all rounded-2xl p-6 flex flex-col justify-between">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="floor-sign font-bold px-3 py-1 rounded text-sm shadow-md">LEVEL 02</span>
+                            <h2 class="text-2xl font-bold text-purple-400"><i class="fa-solid fa-calculator mr-2"></i>Deployment Cost Matrix</h2>
+                        </div>
+                        <button onclick="callElevator(260, 'floor-cost')" class="bg-purple-500 hover:bg-purple-600 active:scale-95 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider shadow-md transition-all">
+                            <i class="fa-solid fa-elevator mr-1.5"></i>Call Lift Here
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
+                        <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+                            <h3 class="text-xs font-bold text-purple-400 uppercase tracking-widest mb-2"><i class="fa-solid fa-building-user mr-1.5"></i>System Budget Component Ledger</h3>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex justify-between border-b border-slate-800 pb-1.5">
+                                    <span class="text-slate-300">Camera Sensors Setup (10 Floors)</span>
+                                    <span class="font-mono text-white font-bold">₹2,50,000</span>
+                                </div>
+                                <div class="flex justify-between border-b border-slate-800 pb-1.5">
+                                    <span class="text-slate-300">Software License & AI Kernels</span>
+                                    <span class="font-mono text-white font-bold">₹20,000</span>
+                                </div>
+                                <div class="flex justify-between border-b border-slate-800 pb-1.5">
+                                    <span class="text-slate-300">Physical Deployment/Controller wiring</span>
+                                    <span class="font-mono text-white font-bold">₹20,000</span>
+                                </div>
+                                <div class="flex justify-between text-emerald-400 font-bold">
+                                    <span>Annual SLA Maintenance Contract</span>
+                                    <span class="font-mono">₹10,000/yr</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xs font-bold text-amber-400 uppercase tracking-widest mb-1.5"><i class="fa-solid fa-gears mr-1.5"></i>Unit Cost Boundaries (Per Shaft)</h3>
+                                <p class="text-[11px] text-slate-400 leading-relaxed">Estimated hardware production limits mapping minimal open-source configurations against complex industrial frameworks:</p>
+                            </div>
+                            <div class="text-sm font-bold text-center py-2 bg-purple-950/30 rounded-lg border border-purple-500/20 text-purple-300 mt-2">
+                                Projected Range: <span class="text-white font-mono">₹25,000 - ₹70,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-start space-x-8 h-8 border-t border-slate-800/60 pt-2">
+                        <span class="text-[11px] text-slate-500 font-mono"><i class="fa-solid fa-bolt text-amber-400 animate-pulse mr-1"></i> Continuous Energy Saving Log Signals Active</span>
+                    </div>
+                </div>
+
+                <div id="floor-benefits" class="floor-row bg-slate-900/30 hover:bg-slate-900/50 transition-all rounded-2xl p-6 flex flex-col justify-between">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="floor-sign font-bold px-3 py-1 rounded text-sm shadow-md">LEVEL 01</span>
+                            <h2 class="text-2xl font-bold text-emerald-400"><i class="fa-solid fa-leaf mr-2"></i>Performance Engineering Audit</h2>
+                        </div>
+                        <button onclick="callElevator(480, 'floor-benefits')" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider shadow-md transition-all">
+                            <i class="fa-solid fa-elevator mr-1.5"></i>Call Lift Here
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
+                        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800/60 flex items-start gap-3">
+                            <div class="p-2.5 bg-cyan-500/10 rounded-lg text-cyan-400 text-sm"><i class="fa-solid fa-bolt-lightning"></i></div>
+                            <div>
+                                <h4 class="text-xs font-bold text-white uppercase">Power Draw Optimization Logic</h4>
+                                <p class="text-[11px] text-slate-400 mt-1">Prevents 125 empty phantom landing stops daily. Eliminates door motor cycles, and high-amp braking friction curves to save 187.5 kWh monthly.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800/60 flex items-start gap-3">
+                            <div class="p-2.5 bg-amber-500/10 rounded-lg text-amber-400 text-sm"><i class="fa-solid fa-wheelchair"></i></div>
+                            <div>
+                                <h4 class="text-xs font-bold text-white uppercase">Fail-Safe Accessibility Assurance</h4>
+                                <p class="text-[11px] text-slate-400 mt-1">Zone presence computer-vision validation ensures zero accidental skip risks for mobility-impaired or slow-moving passengers.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex items-center justify-between text-xs text-amber-300">
+                        <span><i class="fa-solid fa-flask mr-2 text-amber-400 animate-spin"></i><strong>Laboratory Proof-of-Concept Baseline:</strong> Arduino/IR matrix validation prototype realized at a total bill-of-materials cost of <strong>₹1,190</strong>.</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function callElevator(targetTopPx, floorId) {
+            const elevator = document.getElementById('cartoon-elevator');
+            
+            // Step 1: Ensure door close animation executes before departure
+            elevator.classList.remove('open');
+            
+            setTimeout(() => {
+                // Step 2: Transit physical top style metric dynamically
+                elevator.style.top = targetTopPx + 'px';
+                
+                // Remove existing highlighted focus visual rings 
+                document.querySelectorAll('.floor-row').forEach(row => {
+                    row.classList.remove('border-cyan-500/50', 'bg-slate-900/60', 'scale-[1.01]');
+                });
+
+                // Step 3: Trigger open states upon arrival timing metrics
+                setTimeout(() => {
+                    elevator.classList.add('open');
+                    
+                    // Add targeted glowing focus border to active building floor element
+                    const targetFloor = document.getElementById(floorId);
+                    if(targetFloor) {
+                        targetFloor.classList.add('border-cyan-500/50', 'bg-slate-900/60', 'scale-[1.01]');
+                    }
+                }, 1200); // Syncs directly with the 1.2s CSS transition curve configuration
+                
+            }, 300);
+        }
+
+        // Initialize and trigger open doors sequence automatically on initial landing viewport loading
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('cartoon-elevator').classList.add('open');
+            }, 800);
+        });
+    </script>
+</body>
+</html>

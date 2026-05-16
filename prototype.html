@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team ElevateX - Software Architecture Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #070c14 0%, #0d1527 100%);
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .fun-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* --- ADVANCED CREATIVE CSS ANIMATIONS --- */
+        @keyframes floatSystem {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(0.5deg); }
+        }
+        @keyframes flowLine {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        @keyframes dataPulse {
+            0%, 100% { border-color: #1e293b; box-shadow: 0 0 0px rgba(16, 185, 129, 0); }
+            50% { border-color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+        }
+        @keyframes radarScan {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .animate-float { animation: floatSystem 4s infinite ease-in-out; }
+        .animate-pulse-data { animation: dataPulse 3s infinite ease-in-out; }
+
+        /* Architecture Flow Pipeline Strips */
+        .flow-pipe {
+            position: relative;
+            overflow: hidden;
+        }
+        .flow-pipe::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.2), transparent);
+            animation: flowLine 2.5s infinite linear;
+        }
+
+        /* Interactive Layers Styling */
+        .layer-box {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .layer-box:hover {
+            transform: scale(1.03) translateY(-4px);
+            background: rgba(15, 23, 42, 0.85);
+        }
+    </style>
+</head>
+<body class="min-h-screen relative pb-20">
+
+    <div class="absolute inset-y-0 left-1/4 w-0.5 bg-slate-800/20 flow-pipe hidden md:block"></div>
+    <div class="absolute inset-y-0 left-2/4 w-0.5 bg-slate-800/20 flow-pipe hidden md:block" style="animation-delay: 1s;"></div>
+    <div class="absolute inset-y-0 left-3/4 w-0.5 bg-slate-800/20 flow-pipe hidden md:block" style="animation-delay: 1.8s;"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 py-12">
+        
+        <header class="text-center mb-16 animate-float">
+            <div class="inline-block bg-slate-900/90 border-4 border-slate-800 rounded-3xl p-8 max-w-4xl shadow-2xl backdrop-blur-md relative">
+                <div class="absolute -top-7 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-500 to-indigo-500 p-3.5 rounded-full shadow-lg text-white">
+                    <i class="fa-solid fa-network-wired text-2xl"></i>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-black mt-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-emerald-400 tracking-tight">
+                    ElevateX Software Architecture
+                </h1>
+                <p class="text-xs md:text-sm text-slate-400 max-w-2xl mx-auto mt-2">
+                    An animated blueprint decomposition tracking our data pipelines, multi-frame computer vision logic sequences, and secure industrial physical machine layers.
+                </p>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <section class="col-span-12 lg:col-span-4 space-y-4">
+                <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 backdrop-blur-sm">
+                    <h3 class="text-base font-bold text-slate-200 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-terminal text-blue-400"></i> Architecture Ledger
+                    </h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                        Click on any blueprint step configuration module to inspect real-time variable processing paths, edge-node parameters, and framework code parameters.
+                    </p>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/60 font-mono text-[11px] space-y-1.5 text-slate-300">
+                        <div class="flex items-center justify-between border-b border-slate-800/80 pb-1.5 mb-2">
+                            <span class="text-blue-400 font-bold"><i class="fa-solid fa-circle text-[8px] mr-1 animate-pulse text-emerald-400"></i> SYSTEM MONITOR</span>
+                            <span class="text-slate-500">v2.0-Edge</span>
+                        </div>
+                        <div id="log-line-1"><span class="text-slate-500">[00:01]</span> Hub kernel active on edge node.</div>
+                        <div id="log-line-2"><span class="text-slate-500">[00:02]</span> Pipeline awaiting hardware trigger logs...</div>
+                        <div id="log-line-3" class="text-emerald-400"><span class="text-slate-500">[00:03]</span> Privacy protocol running: Zero storage.</div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-4 space-y-2">
+                    <span class="text-[10px] uppercase tracking-wider text-slate-400 font-mono block">Trigger Blueprint Execution Event</span>
+                    <button onclick="simulateArchitectureFlow('passenger')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-2.5 text-xs rounded-xl active:scale-95 transition-all flex items-center justify-between">
+                        <span>Passenger Waiting Matrix Event</span> <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button onclick="simulateArchitectureFlow('phantom')" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold p-2.5 text-xs rounded-xl active:scale-95 transition-all flex items-center justify-between">
+                        <span>Phantom / Passing Motion Event</span> <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <section class="col-span-12 lg:col-span-8 space-y-4">
+                
+                <div id="layer-card-1" class="layer-box bg-slate-900/40 border border-slate-800 p-5 rounded-2xl flex gap-4 items-start animate-pulse-data">
+                    <div class="p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl text-lg mt-0.5"><i class="fa-solid fa-fingerprint"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center flex-wrap gap-2">
+                            <h4 class="text-base font-bold text-white">1. User Interaction Layer</h4>
+                            <span class="text-[10px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-md">Input Capture Hub</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Registers typical hall physical push-button call sequences. Intercepts structural logic to configure real-time context scanning variables without delaying the car mechanics.</p>
+                    </div>
+                </div>
+
+                <div id="layer-card-2" class="layer-box bg-slate-900/40 border border-slate-800 p-5 rounded-2xl flex gap-4 items-start">
+                    <div class="p-3 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-xl text-lg mt-0.5"><i class="fa-solid fa-video"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center flex-wrap gap-2">
+                            <h4 class="text-base font-bold text-white">2. Vision Processing Framework Layer</h4>
+                            <span class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-md">HD RGB Input Matrix</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Accepts and structures incoming digital video streaming grids from localized camera placements. Eliminates raw history frames immediately to comply with strict public privacy regulations.</p>
+                    </div>
+                </div>
+
+                <div id="layer-card-3" class="layer-box bg-slate-900/40 border border-slate-800 p-5 rounded-2xl flex gap-4 items-start">
+                    <div class="p-3 bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-xl text-lg mt-0.5"><i class="fa-solid fa-brain"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center flex-wrap gap-2">
+                            <h4 class="text-base font-bold text-white">3. Intelligent Validation & Classification Engine</h4>
+                            <span class="text-[10px] font-mono bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded-md">HOG + SVM Classifiers</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Extracts structural gradient silhouettes across multi-frame checking pipelines. Segregates and identifies valid waiting passengers from cross-traffic background anomalies using machine vision matrix rules.</p>
+                    </div>
+                </div>
+
+                <div id="layer-card-4" class="layer-box bg-slate-900/40 border border-slate-800 p-5 rounded-2xl flex gap-4 items-start">
+                    <div class="p-3 bg-pink-500/10 text-pink-400 border border-pink-500/20 rounded-xl text-lg mt-0.5"><i class="fa-solid fa-sliders"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center flex-wrap gap-2">
+                            <h4 class="text-base font-bold text-white">4. Control & System Integration Bus Layer</h4>
+                            <span class="text-[10px] font-mono bg-pink-500/10 text-pink-400 border border-pink-500/20 px-2 py-0.5 rounded-md">Industrial Serial Protocol</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Formats validated software outcomes into low-level micro-controller payloads. Handles the 3-5 second Accessibility Mobility Buffer system to preserve safety for users needing assistance.</p>
+                    </div>
+                </div>
+
+                <div id="layer-card-5" class="layer-box bg-slate-900/40 border border-slate-800 p-5 rounded-2xl flex gap-4 items-start">
+                    <div class="p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-lg mt-0.5"><i class="fa-solid fa-gears"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center flex-wrap gap-2">
+                            <h4 class="text-base font-bold text-white">5. Elevator Mechanical Execution Layer</h4>
+                            <span class="text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-md">PLC Override Relay</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">The physical deployment node where industrial controllers override empty hall stop coordinates, skipping unverified floor stops to maximize architectural efficiency.</p>
+                    </div>
+                </div>
+
+                <div id="layer-card-6" class="layer-box bg-slate-900/40 border border-slate-800 p-5 rounded-2xl flex gap-4 items-start">
+                    <div class="p-3 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-xl text-lg mt-0.5"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center flex-wrap gap-2">
+                            <h4 class="text-base font-bold text-white">6. Live Analytics & Monitoring Layer</h4>
+                            <span class="text-[10px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2 py-0.5 rounded-md">Cloud Telemetry Dashboard</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Aggregates ongoing operational logs to display campus metrics like travel time savings, energy reduction factors, and runtime hardware state profiles.</p>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function simulateArchitectureFlow(eventType) {
+            const l1 = document.getElementById('layer-card-1');
+            const l2 = document.getElementById('layer-card-2');
+            const l3 = document.getElementById('layer-card-3');
+            const l4 = document.getElementById('layer-card-4');
+            const l5 = document.getElementById('layer-card-5');
+            const l6 = document.getElementById('layer-card-6');
+            
+            const log1 = document.getElementById('log-line-1');
+            const log2 = document.getElementById('log-line-2');
+            const log3 = document.getElementById('log-line-3');
+
+            // Reset dynamic animations on trigger click
+            const cards = [l1, l2, l3, l4, l5, l6];
+            cards.forEach(c => c.classList.remove('animate-pulse-data'));
+
+            if (eventType === 'passenger') {
+                log1.innerHTML = `<span class="text-slate-500">[Trig]</span> Call button verified at Level 3.`;
+                log2.innerHTML = `<span class="text-cyan-400">[HOG]</span> Passenger silhouette confirmed in zone.`;
+                log3.innerHTML = `<span class="text-emerald-400">[PLC]</span> Executing target stop sequence command.`;
+                
+                // Light up full processing pipeline path sequentially via delays
+                setTimeout(() => l1.classList.add('animate-pulse-data'), 100);
+                setTimeout(() => l2.classList.add('animate-pulse-data'), 300);
+                setTimeout(() => l3.classList.add('animate-pulse-data'), 500);
+                setTimeout(() => l4.classList.add('animate-pulse-data'), 700);
+                setTimeout(() => l5.classList.add('animate-pulse-data'), 900);
+                setTimeout(() => l6.classList.add('animate-pulse-data'), 1100);
+                
+            } else if (eventType === 'phantom') {
+                log1.innerHTML = `<span class="text-slate-500">[Trig]</span> Call button active at Level 1.`;
+                log2.innerHTML = `<span class="text-amber-400">[SVM]</span> Target path cleared: Crossing element only.`;
+                log3.innerHTML = `<span class="text-amber-500">[Bypass]</span> Dispatching skip signal to save energy cycles.`;
+                
+                // Animate filter layer step where decision logic drops call
+                setTimeout(() => l1.classList.add('animate-pulse-data'), 100);
+                setTimeout(() => l2.classList.add('animate-pulse-data'), 300);
+                setTimeout(() => l3.classList.add('animate-pulse-data'), 500);
+            }
+        }
+    </script>
+</body>
+</html>

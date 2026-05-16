@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team ElevateX - Smart Elevator Evolution Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #060b14 0%, #0c1524 100%);
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .fun-title {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* --- PERSISTENT KEYFRAME CARTOON ANIMATIONS --- */
+        @keyframes subtleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+        @keyframes humanWobble {
+            0%, 100% { transform: translateY(0) scaleY(1); }
+            50% { transform: translateY(-6px) scaleY(0.96); }
+        }
+        @keyframes scanningLine {
+            0% { top: 0%; opacity: 0.1; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0.1; }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.8); }
+        }
+        @keyframes conveyorWalk {
+            0% { transform: translateX(110%); }
+            100% { transform: translateX(-110%); }
+        }
+
+        .animate-float { animation: subtleFloat 4s infinite ease-in-out; }
+        .animate-human { animation: humanWobble 1.8s infinite ease-in-out; }
+        .animate-glow { animation: pulseGlow 2.5s infinite ease-in-out; }
+        .animate-walk { animation: conveyorWalk 12s infinite linear; }
+
+        /* --- PHYSICAL SIMULATOR SHAFTS --- */
+        .shaft-structure {
+            background: linear-gradient(180deg, #111e30 0%, #080f1a 100%);
+            border: 3px solid #3b82f6;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        .ai-shaft {
+            border-color: #10b981 !important;
+        }
+
+        .cabin-box {
+            position: absolute;
+            left: 10%;
+            width: 80%;
+            height: 80px;
+            border-radius: 12px;
+            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Scan Line Element overlay */
+        .scanner-overlay::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0;
+            height: 4px;
+            background: #10b981;
+            box-shadow: 0 0 12px #10b981;
+            animation: scanningLine 2s infinite linear;
+        }
+
+        /* Active Navigation Card styles */
+        .step-card.active-step {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24">
+
+    <header class="max-w-7xl mx-auto px-4 pt-12 text-center">
+        <div class="bg-slate-900/90 border-4 border-slate-800 rounded-3xl p-8 relative overflow-hidden animate-glow">
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl"></div>
+            
+            <span class="bg-blue-500/10 text-blue-400 border border-blue-500/30 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full">
+                Kshitij 2026 Innovation Presentation [cite: 1]
+            </span>
+            <h1 class="text-4xl md:text-6xl font-black mt-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-emerald-400">
+                Intelligent Elevator Upgrade Path 
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base max-w-3xl mx-auto mt-3">
+                Transitioning from basic validation prototypes directly into distributed industrial edge machine vision architectures to solve the structural phantom call dilemmas of modern urban infrastructure[cite: 2, 20].
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 mt-8 grid grid-cols-12 gap-8">
+        
+        <section class="col-span-12 lg:col-span-4 bg-slate-900/50 border border-slate-800 p-6 rounded-3xl backdrop-blur-sm flex flex-col justify-between">
+            <div>
+                <h3 class="text-lg font-bold text-slate-200 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-gamepad text-emerald-400"></i> Operational Twin Simulation
+                </h3>
+                <p class="text-xs text-slate-400 mb-4">
+                    Click buttons below or switch nodes to see how the system handles calls differently when transitioning to the AI model.
+                </p>
+
+                <div class="grid grid-cols-2 gap-4 h-[320px] mb-4">
+                    <div class="shaft-structure rounded-xl p-2 flex flex-col justify-between">
+                        <span class="text-[9px] font-bold text-blue-400 uppercase text-center block bg-blue-950/80 rounded py-0.5 border border-blue-500/20">Base Prototype [cite: 18, 20]</span>
+                        <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-800/80 dashed transform -translate-x-1/2"></div>
+                        
+                        <div id="cabin-legacy" class="cabin-box bg-gradient-to-br from-blue-600 to-blue-800 border-2 border-blue-400 shadow-lg shadow-blue-500/20" style="bottom: 10px;">
+                            <div class="text-center">
+                                <span class="text-[10px] font-mono font-black text-white block">CAR-01</span>
+                                <i class="fa-solid fa-ellipsis text-xs text-blue-200 animate-pulse"></i>
+                            </div>
+                        </div>
+                        <span id="legacy-status" class="text-[9px] text-center font-mono text-amber-400 z-10 bg-slate-950/90 rounded py-0.5">Status: Idle</span>
+                    </div>
+
+                    <div class="shaft-structure ai-shaft rounded-xl p-2 flex flex-col justify-between scanner-overlay">
+                        <span class="text-[9px] font-bold text-emerald-400 uppercase text-center block bg-emerald-950/80 rounded py-0.5 border border-emerald-500/20">Edge AI Upgrade [cite: 9, 20]</span>
+                        <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-800/80 dashed transform -translate-x-1/2"></div>
+                        
+                        <div id="cabin-ai" class="cabin-box bg-gradient-to-br from-emerald-600 to-emerald-800 border-2 border-emerald-400 shadow-lg shadow-emerald-500/20" style="bottom: 10px;">
+                            <div class="text-center">
+                                <span class="text-[10px] font-mono font-black text-white block">AI-EDGE</span>
+                                <i class="fa-solid fa-brain text-xs text-emerald-200 animate-bounce"></i>
+                            </div>
+                        </div>
+                        <span id="ai-status" class="text-[9px] text-center font-mono text-emerald-400 z-10 bg-slate-950/90 rounded py-0.5">Status: Scanning [cite: 7]</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400 block"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Trigger Live Floor Event Scenarios</span>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="triggerSimEvent('passenger')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold p-2 text-xs rounded-lg active:scale-95 transition-all text-left flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-check"></i> Waiting User
+                    </button>
+                    <button onclick="triggerSimEvent('phantom')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold p-2 text-xs rounded-lg active:scale-95 transition-all text-left flex items-center gap-1.5">
+                        <i class="fa-solid fa-person-walking-arrow-right"></i> Phantom Call [cite: 4]
+                    </button>
+                </div>
+                <div id="sim-alert-box" class="mt-2 text-[11px] font-mono bg-slate-900 border border-slate-800 text-slate-300 p-2 rounded h-14 overflow-y-auto">
+                    System system active. Choose an event above to trace execution layers.
+                </div>
+            </div>
+        </section>
+
+        <section class="col-span-12 lg:col-span-8 space-y-4">
+            <h2 class="text-xl font-bold text-slate-200 flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-arrow-up-right-dots text-blue-400"></i> Complete Architectural Transition Lifecycle 
+            </h2>
+
+            <div id="card-step1" onclick="focusStage(1)" class="step-card active-step border-2 border-slate-800 bg-slate-900/30 p-5 rounded-2xl cursor-pointer transition-all hover:border-slate-700 relative overflow-hidden">
+                <div class="absolute right-4 top-4 text-slate-800 text-4xl font-black font-mono select-none">01</div>
+                <div class="flex items-start gap-4">
+                    <div class="p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl text-xl mt-1">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-lg font-bold text-white">Basic Validation Prototype [cite: 18, 20]</h3>
+                            <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-mono">BOM: ₹1,190 [cite: 19]</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Initial laboratory validation built on an **Arduino Uno micro-controller framework** paired with directional **IR presence arrays**[cite: 5, 18].
+                        </p>
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">Arduino Uno [cite: 18]</span>
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">IR Proximity [cite: 18]</span>
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">Servo Actuators [cite: 18]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="card-step2" onclick="focusStage(2)" class="step-card border-2 border-slate-800 bg-slate-900/30 p-5 rounded-2xl cursor-pointer transition-all hover:border-slate-700 relative overflow-hidden">
+                <div class="absolute right-4 top-4 text-slate-800 text-4xl font-black font-mono select-none">02</div>
+                <div class="flex items-start gap-4">
+                    <div class="p-3 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-xl text-xl mt-1">
+                        <i class="fa-solid fa-video"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-lg font-bold text-white">Vision Processing Layer Migration [cite: 9, 20]</h3>
+                            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-mono">Industrial Scope [cite: 14]</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Replacing simple binary IR checks with privacy-preserving **HD RGB sensor feeds**, establishing a rich vision matrix feed to separate valid passengers from background motion artifacts[cite: 4, 9].
+                        </p>
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">HD RGB Stream [cite: 14]</span>
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">Edge Computing Core [cite: 14]</span>
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">Zero-Storage Privacy [cite: 7, 11]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="card-step3" onclick="focusStage(3)" class="step-card border-2 border-slate-800 bg-slate-900/30 p-5 rounded-2xl cursor-pointer transition-all hover:border-slate-700 relative overflow-hidden">
+                <div class="absolute right-4 top-4 text-slate-800 text-4xl font-black font-mono select-none">03</div>
+                <div class="flex items-start gap-4">
+                    <div class="p-3 bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-xl text-xl mt-1">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-lg font-bold text-white">HOG + SVM Intelligent Decision Engine [cite: 4, 9]</h3>
+                            <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full font-mono">AI Classification [cite: 9, 20]</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Deploying machine learning logic frames to classify targets. **Histogram of Oriented Gradients (HOG)** pulls frame silhouettes, and **Support Vector Machines (SVM)** validate actual humans[cite: 4, 9].
+                        </p>
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">HOG Extraction [cite: 9]</span>
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">SVM Classifier [cite: 9]</span>
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">Multi-Frame Logic Validation [cite: 4, 9]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="card-step4" onclick="focusStage(4)" class="step-card border-2 border-slate-800 bg-slate-900/30 p-5 rounded-2xl cursor-pointer transition-all hover:border-slate-700 relative overflow-hidden">
+                <div class="absolute right-4 top-4 text-slate-800 text-4xl font-black font-mono select-none">04</div>
+                <div class="flex items-start gap-4">
+                    <div class="p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-xl mt-1">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-lg font-bold text-white">Industrial PLC Integration & Execution [cite: 10, 20]</h3>
+                            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-mono">Production Grade [cite: 14]</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Translating frame confirmations directly into physical lift system overrides using standard industrial bus lines, bypassing false hall calls automatically[cite: 8, 10].
+                        </p>
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">PLC Controller Override [cite: 10]</span>
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">Modbus / RS-485 Serial Bus [cite: 10]</span>
+                            <span class="text-[10px] bg-slate-950 px-2 py-1 rounded-md border border-slate-800 text-slate-300 font-mono">Real-Time Transit Optimization [cite: 9]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <section class="max-w-7xl mx-auto px-4 mt-8">
+        <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-4 overflow-hidden relative h-20 flex items-center">
+            <div class="absolute left-4 z-10 bg-slate-950/80 px-2 py-1 rounded border border-slate-800 text-xs text-slate-400">
+                <i class="fa-solid fa-eye text-emerald-400 mr-1 animate-pulse"></i> Landing Zone Viewport
+            </div>
+            <div class="animate-walk absolute flex items-center gap-20 whitespace-nowrap">
+                <div class="flex items-center gap-2">
+                    <svg class="w-8 h-8 animate-human" viewBox="0 0 64 64"><circle cx="32" cy="20" r="10" fill="#f59e0b"/><path d="M16 48C16 40 24 34 32 34S48 40 48 48V54H16V48Z" fill="#3b82f6"/></svg>
+                    <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-mono">Valid Passenger (Waiting) [cite: 4]</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-8 h-8 opacity-40" viewBox="0 0 64 64"><circle cx="32" cy="20" r="10" fill="#a8a29e"/><path d="M16 48C16 40 24 34 32 34S48 40 48 48V54H16V48Z" fill="#78716c"/></svg>
+                    <span class="text-[10px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded font-mono">Passerby (Ignored by Zone Matrix) [cite: 4]</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="text-xl text-cyan-400 animate-bounce"><i class="fa-solid fa-wheelchair"></i></div>
+                    <span class="text-[10px] bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded font-mono">Mobility Buffer Triggered (+5s Grace) </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 mt-8">
+        <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6">
+            <h3 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-layer-group text-indigo-400 mr-2"></i>Real-Life Architectural Blueprint Breakdown [cite: 9]</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="font-bold text-blue-400 mb-1">1. User Interaction Layer [cite: 9]</div>
+                    <p class="text-slate-400">Captures normal hall push-button presses while initializing real-time background landing zone checks[cite: 4, 9].</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="font-bold text-indigo-400 mb-1">2. Vision Processing Layer [cite: 9]</div>
+                    <p class="text-slate-400">Extracts HOG attributes dynamically from each local frame at the edge, ensuring immediate classification processing[cite: 9].</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="font-bold text-purple-400 mb-1">3. Validation & Decision Engine [cite: 9]</div>
+                    <p class="text-slate-400">Aggregates multi-frame confirmation logs to establish safe tracking thresholds before skipping stops[cite: 4, 10].</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="font-bold text-pink-400 mb-1">4. Control & Integration Layer [cite: 10]</div>
+                    <p class="text-slate-400">Formats decision commands into safe serial industrial communication buffers (CAN / Modbus)[cite: 10].</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="font-bold text-emerald-400 mb-1">5. Elevator Execution Layer [cite: 10]</div>
+                    <p class="text-slate-400">The physical system controller handles the request, optimizing destination response patterns[cite: 9, 10].</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="font-bold text-cyan-400 mb-1">6. Monitoring & Logs Layer [cite: 11, 12]</div>
+                    <p class="text-slate-400">Pushes continuous analytics dashboards focusing on energy conservation trends and latency metrics[cite: 11, 12].</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Transition simulator coordinates based on current active architecture stage
+        function focusStage(stageIndex) {
+            // Remove selection styles across timeline card wrappers
+            document.querySelectorAll('.step-card').forEach(card => {
+                card.classList.remove('active-step');
+            });
+
+            // Activate specific item selected
+            document.getElementById('card-step' + stageIndex).classList.add('active-step');
+            
+            const legacyLift = document.getElementById('cabin-legacy');
+            const aiLift = document.getElementById('cabin-ai');
+            const alertLog = document.getElementById('sim-alert-box');
+
+            // Shift simulator cabin heights dynamically to represent lift transitions
+            if (stageIndex === 1) {
+                legacyLift.style.bottom = "10px";
+                aiLift.style.bottom = "10px";
+                alertLog.innerHTML = "<strong>Stage 01 Activated:</strong> Core Arduino Uno system reading localized binary inputs[cite: 18].";
+            } else if (stageIndex === 2) {
+                legacyLift.style.bottom = "110px";
+                aiLift.style.bottom = "90px";
+                alertLog.innerHTML = "<strong>Stage 02 Activated:</strong> Video stream layer initialized. Raw pixels feeding buffer arrays[cite: 9].";
+            } else if (stageIndex === 3) {
+                legacyLift.style.bottom = "180px";
+                aiLift.style.bottom = "200px";
+                alertLog.innerHTML = "<strong>Stage 03 Activated:</strong> Machine learning matrices running. HOG frame models isolating waiting signatures[cite: 4, 9].";
+            } else if (stageIndex === 4) {
+                legacyLift.style.bottom = "240px";
+                aiLift.style.bottom = "240px";
+                alertLog.innerHTML = "<strong>Stage 04 Activated:</strong> Full industrial grade PLC communication established. Overrides active[cite: 10, 14].";
+            }
+        }
+
+        // Handle quick event triggers from simulator dashboard panel buttons
+        function triggerSimEvent(eventType) {
+            const legacyStatus = document.getElementById('legacy-status');
+            const aiStatus = document.getElementById('ai-status');
+            const alertLog = document.getElementById('sim-alert-box');
+
+            if (eventType === 'passenger') {
+                legacyStatus.innerText = "Status: STOPPING";
+                aiStatus.innerText = "Status: PASSENGER DETECTED";
+                alertLog.innerHTML = "<span class='text-emerald-400'>[Verified]</span> Valid person pattern tracked across sequential frames. AI shaft signals normal industrial stop override[cite: 4, 10].";
+            } else if (eventType === 'phantom') {
+                legacyStatus.innerText = "Status: STOPPING (Wasted)";
+                aiStatus.innerText = "Status: BYPASSING CALL";
+                alertLog.innerHTML = "<span class='text-amber-400'>[Bypass]</span> Passerby left target area before commit check. AI system skips stop to save energy[cite: 4, 7].";
+            }
+        }
+    </script>
+</body>
+</html>
